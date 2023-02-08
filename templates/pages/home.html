@@ -1,26 +1,53 @@
 {% extends "base.html" %}
 
 {% block head_title %} 
-This is amazing!!!
+🚧
 {% endblock head_title %}
 
 {% block content %}
 Welcome to OneDrop
 
+<div id="tweets">
+    Loading
+</div>
+
 
 <script>
+const tweetsElement = document.getElementById("tweets") // get the element
+// tweetsElement.innerHTML = 'Loading...' // set new html in that element
+
+// var el1 = "<h1>Hi there1</h1>"
+// var el2 = "<h1>Hi there2</h1>"
+// var el2 = "<h1>Hi there3</h1>"
+// tweetsElement.innerHTML = el1 + el2 + el3
+
 const xhr = new XMLHttpRequest()
 const method = 'GET' 
 const url = "/tweets"
 const  responseType = "json"
 
+
+function formatTweetElement(tweet){
+    var formattedTweet = "<div class='mb-4 tweet' id='tweet-" + tweet.id + "' + <p>" + 
+        tweet.content + "</p></div>"
+    return formattedTweet
+
+}
 xhr.responseType = responseType
 xhr.open(method, url)
 xhr.onload = function() {
     console.log(xhr.response)
     const serverResponse = xhr.response
-    var listedItems = serverResponse.response
-    console.log(listedItems)
+    const listedItems = serverResponse.response
+    var finalTweetStr = ""
+    var i;
+    for (i=0;i<listedItems.length; i++){
+        var tweetObj = listedItems[i]
+        var currentItem = formatTweetElement(tweetObj)
+            finalTweetStr += currentItem
+    }
+    tweetsElement.innerHTML = finalTweetStr
+    // console.log(listedItems)
 }
 xhr.send()
 

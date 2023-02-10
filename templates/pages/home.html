@@ -82,8 +82,9 @@ function handleTweetFormError(msg, display){
                 }
                 console.log(contentErrorMsg)
 
-            } else if (xhr.status === 500){
-                alert("There was a server error, please try again.")
+            } else if (xhr.status === 401){
+                alert("There must be login!")
+                window.location.href = "/login"
             }
         }
         xhr.onerror = function(){

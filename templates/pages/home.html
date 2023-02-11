@@ -85,6 +85,9 @@ function handleTweetFormError(msg, display){
             } else if (xhr.status === 401){
                 alert("You must be login!")
                 window.location.href = "/login"
+            } else if (xhr.status === 403){
+                alert("You must be login!")
+                window.location.href = "/login"
             }
         }
         xhr.onerror = function(){
@@ -124,7 +127,6 @@ function handleTweetFormError(msg, display){
     loadTweets(tweetsContainerElement)
 
 
-    
     
     function handleDidLike (tweet_id, currentCount) {
         console.log(tweet_id, currentCount)

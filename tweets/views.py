@@ -12,7 +12,7 @@ from .forms import TweetForm
 from .models import Tweet 
 from .serializers import (
     TweetSerializer, 
-    TweetactionSerializer,
+    TweetActionSerializer,
     TweetCreateSerializer
 )
 
@@ -48,7 +48,7 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     return Response(serializer.data, status=200)
 
 
-api_view(['DELETE', 'POST'])
+@api_view(['DELETE', 'POST'])
 @permission_classes([IsAuthenticated])
 def tweet_delete_view(request, tweet_id, *args, **kwargs):
     qs = Tweet.objects.filter(id=tweet_id)
@@ -70,7 +70,7 @@ def tweet_action_view(request, *args, **kwargs):
     id is required.
     Action options are: like, unlike, retweet
     '''
-    serializer = TweetactionSerializer(data=request.data)
+    serializer = TweetActionSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         data = serializer.validated_data
         tweet_id = data.get("id")
@@ -86,13 +86,17 @@ def tweet_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=200)
         elif action == "unlike":
             obj.likes.remove(request.user)
+            serializer = TweetSerializer(obj)
+            return Response(serializer.data, status=200)
+            
         elif action == "retweet":
             new_tweet = Tweet.objects.create(
                 user=request.user, 
                 parent=obj, 
-                content=content)
+                content=content,
+            )
             serializer = TweetSerializer(new_tweet)
-            return Response(serializer.data, status=200)  
+            return Response(serializer.data, status=201)  
     return Response({}, status=200)
 
 

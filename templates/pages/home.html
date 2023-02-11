@@ -83,7 +83,7 @@ function handleTweetFormError(msg, display){
                 console.log(contentErrorMsg)
 
             } else if (xhr.status === 401){
-                alert("There must be login!")
+                alert("You must be login!")
                 window.location.href = "/login"
             }
         }
@@ -108,7 +108,7 @@ function handleTweetFormError(msg, display){
         xhr.open(method, url)
         xhr.onload = function() {
             const serverResponse = xhr.response
-            const listedItems = serverResponse.response // array
+            const listedItems = serverResponse // array
             var finalTweetStr = ""
             var i;
             for (i=0;i<listedItems.length; i++) {
